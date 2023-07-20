@@ -1,0 +1,76 @@
+FROM ubuntu:20.04
+# Necessary for tzdata
+ENV DEBIAN_FRONTEND=noninteractive
+ARG TZ_ARG=UTC
+ENV TZ=${TZ_ARG}
+# Add i386 support for support for Pin
+RUN dpkg --add-architecture i386
+RUN apt-get update && apt-get install -y \
+    python \
+    screen \
+    tmux \
+    binutils \
+    libc6:i386 \
+    libncurses5:i386 \
+    libstdc++6:i386 \
+ && rm -rf /var/lib/apt/lists/*
+# For building Sniper
+RUN apt-get update && apt-get install -y \
+    automake \
+    build-essential \
+    cmake \
+    curl \
+    wget \
+    libboost-dev \
+    libsqlite3-dev \
+    zlib1g-dev \
+    libbz2-dev \
+ && rm -rf /var/lib/apt/lists/*
+# For building RISC-V Tools
+RUN apt-get update && apt-get install -y \
+    autoconf \
+    automake \
+    autotools-dev \
+    bc \
+    bison \
+    curl \
+    device-tree-compiler \
+    flex \
+    gawk \
+    gperf \
+    libexpat-dev \
+    libgmp-dev \
+    libmpc-dev \
+    libmpfr-dev \
+    libtool \
+    libusb-1.0-0-dev \
+    patchutils \
+    pkg-config \
+    texinfo \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
+# Helper utilities
+RUN apt-get update && apt-get install -y \
+    gdb \
+    gfortran \
+    git \
+    g++-9 \
+    vim \
+ && rm -rf /var/lib/apt/lists/*
+# Added by Kleber Kruger...
+# Benchmarks
+RUN apt-get update && apt-get install -y \
+    xsltproc \
+    gettext \
+    libx11-dev \
+    libxext-dev \
+    libxt-dev \
+    libxmu-dev \
+    libxi-dev \
+    task-spooler \
+ && rm -rf /var/lib/apt/lists/*
+# Setting Environment Variables
+ARG GRAPHITE_ROOT_ARG=~/sniper
+ENV GRAPHITE_ROOT=${GRAPHITE_ROOT_ARG}
+ARG BENCHMARKS_ROOT_ARG=~/benchmarks
+ENV BENCHMARKS_ROOT=${BENCHMARKS_ROOT_ARG}
